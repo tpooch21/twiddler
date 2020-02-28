@@ -3,25 +3,99 @@
   <head>
     <script src="jquery.js"></script>
     <script src="data_generator.js"></script>
+    <link rel="stylesheet" href= "styles.css">
   </head>
   <body>
     <script>
 
       $(document).ready(function(){
         var $body = $('body');
-        $body.html('');
 
         var index = streams.home.length - 1;
+        var checkpoint = streams.home.length - 1;
+
         while(index >= 0){
-          var tweet = streams.home[index];
-          var $tweet = $('<div></div>');
-          $tweet.text('@' + tweet.user + ': ' + tweet.message);
-          $tweet.appendTo($body);
-          index -= 1;
+            var tweet = streams.home[index];
+            var $tweet = $('<div class="tweet"></div>');
+            var user = tweet.user;
+            var hyperlink = getUserProfile(user);
+
+            // Create time stamp
+            var hours = tweet.created_at.getHours();
+            var minutes = ('0' + tweet.created_at.getMinutes()).slice(-2);
+            var seconds = ('0' + tweet.created_at.getSeconds()).slice(-2);
+            var timeStamp = hours + ':' + minutes + ':' + seconds;
+
+            $tweet.html('<a href=' + hyperlink + '><strong>@' + tweet.user + ': </strong></a>' + tweet.message + ' <em>' + timeStamp + '</em>');
+            $tweet.appendTo($body);
+            index -= 1;
+          }
+
+        var marker; // Tracks newIndex val as of most recent click. Checkpoint is reassigned to this value after
+
+
+        function getUserProfile(user) {
+            if (user === 'shawndrost') {
+                return "@shawndrost.html";
+            } else if (user === 'sharksforcheap') {
+                return "@sharksforcheap.html";
+            } else if (user === 'mracus') {
+                return "@mracus.html";
+            } else {
+                return "@douglascalhoun.html";
+            }
         }
 
-      });
+        function clickHandler() {
+            $('.tweet').fadeOut();
+            var newIndex = streams.home.length - 1;
+            marker = newIndex;
+            while (newIndex > checkpoint) {
+                var tweet = streams.home[newIndex];
+                var $tweet = $('<div class="tweet"></div>');
+                var user = tweet.user;
+                var hyperlink = getUserProfile(user);
 
+                // var hyperLink = getUserProfile(user);
+
+                // Create time stamp
+                var hours = tweet.created_at.getHours();
+                var minutes = ('0' + tweet.created_at.getMinutes()).slice(-2);
+                var seconds = ('0' + tweet.created_at.getSeconds()).slice(-2);
+                var timeStamp = hours + ':' + minutes + ':' + seconds;
+
+                // Add tweet to home page
+                $tweet.fadeIn().html('<a href=' + hyperlink + ' class="username"><strong>@' + tweet.user + ': </strong></a>' + tweet.message + ' <em>' + timeStamp + '</em>');
+                $tweet.appendTo($body);
+                newIndex -= 1;
+            }
+            checkpoint = marker;
+        }
+
+        var $button = $('button');
+        $button.on('click', clickHandler);
+
+
+        // var index = streams.home.length - 1;
+        // while(index >= 0){
+        //   var tweet = streams.home[index];
+        //   var $tweet = $('<div></div>');
+        //   $tweet.text('@' + tweet.user + ': ' + tweet.message);
+        //   $tweet.appendTo($body);
+        //   index -= 1;
+        // }
+
+      });
     </script>
+
+    <div class="header">
+        <h1>What's Going On Around You?</h1>
+        <button>Generate New Tweets</button>
+    </div>
+
+    <div class="tweet">
+
+    </div>
+
   </body>
 </html>
