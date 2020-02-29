@@ -26,7 +26,7 @@
             var seconds = ('0' + tweet.created_at.getSeconds()).slice(-2);
             var timeStamp = hours + ':' + minutes + ':' + seconds;
 
-            $tweet.html('<a href=' + hyperlink + '><strong>@' + tweet.user + ': </strong></a>' + tweet.message + ' <em>' + timeStamp + '</em>');
+            $tweet.fadeIn().html('<a href=' + hyperlink + '><strong>@' + tweet.user + ': </strong></a>' + tweet.message + ' <em>' + timeStamp + '</em>');
             $tweet.appendTo($body);
             index -= 1;
           }
@@ -65,7 +65,7 @@
                 var timeStamp = hours + ':' + minutes + ':' + seconds;
 
                 // Add tweet to home page
-                $tweet.fadeIn().html('<a href=' + hyperlink + ' class="username"><strong>@' + tweet.user + ': </strong></a>' + tweet.message + ' <em>' + timeStamp + '</em>');
+                $tweet.fadeIn().html('<a href=' + hyperlink + '><strong>@' + tweet.user + ': </strong></a>' + tweet.message + ' <em>' + timeStamp + '</em>');
                 $tweet.appendTo($body);
                 newIndex -= 1;
             }
@@ -90,7 +90,7 @@
 
     <div class="header">
         <h1>What's Going On Around You?</h1>
-        <button>Generate New Tweets</button>
+        <button>Update Feed</button>
     </div>
 
     <div class="tweet">
