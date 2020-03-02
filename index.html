@@ -56,7 +56,7 @@
         }
 
         function clickHandler() {
-            $('.tweet').fadeOut();
+            $('.tweet').fadeOut().remove();
             var newIndex = streams.home.length - 1;
             marker = newIndex;
             while (newIndex > checkpoint) {
@@ -98,9 +98,7 @@
         var $post = $('.userPost');
         $post.on('click', () => {
             var content = $('.postText').val();
-            console.log(content);
             var $tweet = $('<div class="tweet"></div>');
-            console.log($tweet);
 
             // Get current timeStamp
             var currentTime = new Date();
@@ -108,7 +106,6 @@
             var minutes = ('0' + currentTime.getMinutes()).slice(-2);
             var seconds = ('0' + currentTime.getSeconds()).slice(-2);
             var timeStamp = hours + ':' + minutes + ':' + seconds;
-            console.log(timeStamp);
 
             // Post tweet to body
             $tweet.fadeIn().html('<span class="profile"><strong>@tpooch21:</strong></span> ' + content + '<em> ' + timeStamp + '</em>');
@@ -135,7 +132,7 @@
     <div class="container">
         <div class="row">
             <div class="col-xs-2">
-                <img class="logo" src="https://thumbs-prod.si-cdn.com/_mAUmi5urL7uYM4V-g295RJky_A=/420x240/https://public-media.si-cdn.com/filer/ec/c8/ecc8812c-4ac2-4dac-ab0f-cf0de4a76286/twitter_logo_whiteonblue.jpg" width="150" height="80">
+                <img class="logo" src="https://thumbs-prod.si-cdn.com/_mAUmi5urL7uYM4V-g295RJky_A=/420x240/https://public-media.si-cdn.com/filer/ec/c8/ecc8812c-4ac2-4dac-ab0f-cf0de4a76286/twitter_logo_whiteonblue.jpg" width="130" height="70">
                 </img>
             </div>
             <div class="col-xs-7">
@@ -145,19 +142,25 @@
             </div>
         </div>
 
-        <h2>What's Happening Around You?</h2>
-        <button class="feed">Update Feed</button>
+        <div class="feedme">
+            <h2>What's Happening Around You?</h2>
+            <button class="feed">Update Feed</button>
+        </div>
     </div>
 
-    <div class="container">
-        <div class="status">
-            <h4>Trevor Puccini (@tpooch21):</h4>
+
+    <div class="status">
+        <div class="myPosts">
+
+            <h4 class="myName">Trevor Puccini (@tpooch21):</h4>
             <textarea class="postText" placeholder="What's on your mind?" cols="30"></textarea>
             <br>
             <button class="userPost">Post</button>
             <p class="wordcount"><span class="characters">140</span> characters remaining</p>
+
         </div>
     </div>
+
 
     <div class="posts">
 
