@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <script src="jquery.js"></script>
+    <script src="data_generator.js"></script>
+    <link rel="stylesheet" href= "styles.css">
+  </head>
+  <body>
+
+    <script>
+
+        $(document).ready(function() {
+
+            // Add hover functionality to buttons
+            var $button = $('button');
+            $button.on('mouseenter', event => {
+                $(event.currentTarget).addClass('btn-hover');
+            }).on('mouseleave', event => {
+                $(event.currentTarget).removeClass('btn-hover');
+            });
+
+            // Add functionality to home button to return home when clicked
+            var $home = $('.home');
+            $home.on('click', () => {
+                window.location.href = "index.html";
+            });
+
+            // Add tweets to user page when page initially loads
+            var index = streams.users.shawndrost.length - 1;
+            var checkpoint = streams.users.shawndrost.length - 1;
+
+            while (index >= 0) {
+                var tweet = streams.users.shawndrost[index];
+                var user = '@shawndrost';
+                var $tweet = $('<div class="tweet"></div>');
+
+                // To format timeStamp
+                var time = tweet.created_at;
+                var hours = time.getHours();
+                var minutes = ('0' + time.getMinutes()).slice(-2);
+                var seconds = ('0' + time.getSeconds()).slice(-2);
+                var timeStamp = hours + ':' + minutes + ':' + seconds;
+
+                // To format tweet and append it to div .tweets
+                $tweet.fadeIn().html('<a class="profile">' + user + ':</a> ' + tweet.message + ' <em>' + timeStamp + '</em>');
+                $tweet.appendTo('.tweets');
+                index -= 1;
+            }
+
+            // To store initial index value as of most recent feed update
+            var marker;
+
+            // Update feed with new tweets from user by clicking 'update feed' button
+            var $feed = $('.feed');
+            $feed.on('click', () => {
+                $('.tweet').fadeOut().remove();
+                var newIndex = streams.users.shawndrost.length - 1;
+                marker = newIndex;
+                while (newIndex > checkpoint) {
+                    var tweet = streams.users.shawndrost[newIndex];
+                    var user = '@shawndrost';
+                    var $tweet = $('<div class="tweet"></div>');
+
+                    // To format timeStamp
+                    var time = tweet.created_at;
+                    var hours = time.getHours();
+                    var minutes = ('0' + time.getMinutes()).slice(-2);
+                    var seconds = ('0' + time.getSeconds()).slice(-2);
+                    var timeStamp = hours + ':' + minutes + ':' + seconds;
+
+                    // To format tweet and append it to div .tweets
+                    $tweet.fadeIn().html('<a class="profile">' + user + ':</a> ' + tweet.message + ' <em>' + timeStamp + '</em>');
+                    $tweet.appendTo('.tweets');
+                    newIndex -= 1;
+                }
+                checkpoint = marker;
+            });
+
+        });
+
+
+    </script>
+
+    <div class="container">
+        <div class="row">
+            <div class="col-xs-2">
+                <img class="profPic" src='https://i.pinimg.com/originals/65/66/d9/6566d99186ef89f8dc602a2fae7e069d.png' width="90" height="80">
+                </img>
+            </div>
+            <div class="col-xs-7">
+            </div>
+            <div class="col-xs-2">
+                <h1 class="user">Shawn Drost</h1>
+            </div>
+        </div>
+        <div class="buttons">
+            <button class="feed">Update Feed</button>
+            <button class="home">Home</button>
+    </div>
+
+    <div class="posts">
+        <div class="tweets">
+        </div>
+    </div>
+
+    <script src="jquery.js"></script>
+    <script src="data_generator.js"></script>
+
+  </body>
+</html>
