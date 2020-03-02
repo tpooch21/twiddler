@@ -14,6 +14,7 @@
         var index = streams.home.length - 1;
         var checkpoint = streams.home.length - 1;
 
+        // Generate most recent tweets when page loads
         while(index >= 0){
             var tweet = streams.home[index];
             var $tweet = $('<div class="tweet"></div>');
@@ -26,12 +27,20 @@
             var seconds = ('0' + tweet.created_at.getSeconds()).slice(-2);
             var timeStamp = hours + ':' + minutes + ':' + seconds;
 
-            $tweet.fadeIn().html('<a href=' + hyperlink + '><strong>@' + tweet.user + ': </strong></a>' + tweet.message + ' <em>' + timeStamp + '</em>');
-            $tweet.appendTo($body);
+            $tweet.fadeIn().html('<a class="profile" href=' + hyperlink + '>@' + tweet.user + ': </a>' + tweet.message + ' <em>' + timeStamp + '</em>');
+            $tweet.appendTo('.tweets');
             index -= 1;
           }
 
         var marker; // Tracks newIndex val as of most recent click. Checkpoint is reassigned to this value after
+
+        // Turn feed, home buttons white when hovered over
+        var $button = $('button');
+        $button.on('mouseenter', event => {
+            $(event.currentTarget).addClass('btn-hover');
+        }).on('mouseleave', event => {
+            $(event.currentTarget).removeClass('btn-hover');
+        });
 
 
         function getUserProfile(user) {
@@ -56,8 +65,6 @@
                 var user = tweet.user;
                 var hyperlink = getUserProfile(user);
 
-                // var hyperLink = getUserProfile(user);
-
                 // Create time stamp
                 var hours = tweet.created_at.getHours();
                 var minutes = ('0' + tweet.created_at.getMinutes()).slice(-2);
@@ -65,37 +72,106 @@
                 var timeStamp = hours + ':' + minutes + ':' + seconds;
 
                 // Add tweet to home page
-                $tweet.fadeIn().html('<a href=' + hyperlink + '><strong>@' + tweet.user + ': </strong></a>' + tweet.message + ' <em>' + timeStamp + '</em>');
-                $tweet.appendTo($body);
+                $tweet.fadeIn().html('<a class="profile" href=' + hyperlink + '>@' + tweet.user + ': </a>' + tweet.message + ' <em>' + timeStamp + '</em>');
+                $tweet.appendTo('.tweets');
                 newIndex -= 1;
             }
             checkpoint = marker;
-        }
+        };
 
-        var $button = $('button');
-        $button.on('click', clickHandler);
+        // Generate new tweets when 'update feed' button is clicked
+        var $feed = $('.feed');
+        $feed.on('click', clickHandler);
 
 
-        // var index = streams.home.length - 1;
-        // while(index >= 0){
-        //   var tweet = streams.home[index];
-        //   var $tweet = $('<div></div>');
-        //   $tweet.text('@' + tweet.user + ': ' + tweet.message);
-        //   $tweet.appendTo($body);
-        //   index -= 1;
-        // }
+        var $a = $('a');
+        $a.on('mouseenter', event => {
+            $(event.currentTarget).removeClass('profile');
+            $(event.currentTarget).addClass('user-hover');
+        }).on('mouseleave', event => {
+            $(event.currentTarget).addClass('profile');
+            $(event.currentTarget).removeClass('user-hover');
+        });
+
+
+        // Add user post to top of feed when status is entered and 'post' button is clicked
+        var $post = $('.userPost');
+        $post.on('click', () => {
+            var content = $('.postText').val();
+            console.log(content);
+            var $tweet = $('<div class="tweet"></div>');
+            console.log($tweet);
+
+            // Get current timeStamp
+            var currentTime = new Date();
+            var hours = currentTime.getHours();
+            var minutes = ('0' + currentTime.getMinutes()).slice(-2);
+            var seconds = ('0' + currentTime.getSeconds()).slice(-2);
+            var timeStamp = hours + ':' + minutes + ':' + seconds;
+            console.log(timeStamp);
+
+            // Post tweet to body
+            $tweet.fadeIn().html('<span class="profile"><strong>@tpooch21:</strong></span> ' + content + '<em> ' + timeStamp + '</em>');
+            $tweet.prependTo(".tweets");
+
+        });
+
+        // Update character count when keys are typed in status box, and turn red if limit exceeded
+        $('.postText').on('keyup', event => {
+            $('.postText').focus();
+            var characters = $(event.currentTarget).val();
+            var remaining = 140 - characters.length;
+            $('.characters').html(remaining);
+            if (remaining <= 0) {
+                $('.wordcount').addClass('exceeded');
+            } else {
+                $('.wordcount').removeClass('exceeded');
+            }
+        })
 
       });
     </script>
 
-    <div class="header">
-        <h1>What's Going On Around You?</h1>
-        <button>Update Feed</button>
+    <div class="container">
+        <div class="row">
+            <div class="col-xs-2">
+                <img class="logo" src="https://thumbs-prod.si-cdn.com/_mAUmi5urL7uYM4V-g295RJky_A=/420x240/https://public-media.si-cdn.com/filer/ec/c8/ecc8812c-4ac2-4dac-ab0f-cf0de4a76286/twitter_logo_whiteonblue.jpg" width="150" height="80">
+                </img>
+            </div>
+            <div class="col-xs-7">
+            </div>
+            <div class="col-xs-2">
+                <h1 class="title">Twiddler</h1>
+            </div>
+        </div>
+
+        <h2>What's Happening Around You?</h2>
+        <button class="feed">Update Feed</button>
     </div>
 
-    <div class="tweet">
+    <div class="container">
+        <div class="status">
+            <h4>Trevor Puccini (@tpooch21):</h4>
+            <textarea class="postText" placeholder="What's on your mind?" cols="30"></textarea>
+            <br>
+            <button class="userPost">Post</button>
+            <p class="wordcount"><span class="characters">140</span> characters remaining</p>
+        </div>
+    </div>
+
+    <div class="posts">
+
+        <div class="tweets">
+        </div>
 
     </div>
+
+    <script src="jquery.js"></script>
+    <script src="data_generator.js"></script>
+
 
   </body>
+
+
+
 </html>
