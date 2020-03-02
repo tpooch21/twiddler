@@ -42,7 +42,7 @@
             $(event.currentTarget).removeClass('btn-hover');
         });
 
-
+        // Return href to proper user page
         function getUserProfile(user) {
             if (user === 'shawndrost') {
                 return "@shawndrost.html";
@@ -55,6 +55,7 @@
             }
         }
 
+        // Define 'click' event handler when update feed button is clicked
         function clickHandler() {
             $('.tweet').fadeOut().remove();
             var newIndex = streams.home.length - 1;
@@ -79,11 +80,7 @@
             checkpoint = marker;
         };
 
-        // Generate new tweets when 'update feed' button is clicked
-        var $feed = $('.feed');
-        $feed.on('click', clickHandler);
-
-
+        // Add hover effects to usernames within tweets
         var $a = $('a');
         $a.on('mouseenter', event => {
             $(event.currentTarget).removeClass('profile');
@@ -92,6 +89,10 @@
             $(event.currentTarget).addClass('profile');
             $(event.currentTarget).removeClass('user-hover');
         });
+
+        // Generate new tweets when 'update feed' button is clicked
+        var $feed = $('.feed');
+        $feed.on('click', clickHandler);
 
 
         // Add user post to top of feed when status is entered and 'post' button is clicked
